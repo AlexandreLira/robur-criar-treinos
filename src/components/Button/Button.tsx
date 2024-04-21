@@ -14,10 +14,15 @@ export function Button(props: ButtonProps) {
         title = 'Confirmar',
         colors = [theme.colors.primary, theme.colors.secodanry],
         textColor = theme.colors.shape,
+        disabled,
         ...rest
     } = props
     return (
-        <TouchableOpacity style={styles.container} {...rest}>
+        <TouchableOpacity
+            style={[styles.container, disabled && styles.disabled]}
+            disabled={disabled}
+            {...rest}
+        >
             <LinearGradient
                 colors={colors}
                 style={styles.gradient}

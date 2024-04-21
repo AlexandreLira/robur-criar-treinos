@@ -21,5 +21,8 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         color: theme.colors.secodanry,
         fontWeight: 'bold'
+    },
+    disabled: {
+        opacity: 0.5
     }
 })
