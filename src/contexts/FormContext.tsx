@@ -1,14 +1,28 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 
+export type ItemType = {
+    key: string;
+    label: string;
+    value: string;
+    icon?: string;
+}
 
-
-
+export type FormData = {
+    objective: ItemType;
+    gender: ItemType;
+    experience: ItemType;
+    age: ItemType;
+    weight: ItemType;
+    stature: ItemType;
+}
 
 export type AuthContextDataProps = {
     steps: string[];
     position: number;
     handleNextStep: () => void
-    handlePreviusStep: () => void
+    handlePreviusStep: () => void;
+    data: FormData,
+    setData: React.Dispatch<React.SetStateAction<FormData>>
 }
 
 type FormContextProviderProps = {
@@ -20,18 +34,20 @@ export const FormContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function FormContextProvider({ children }: FormContextProviderProps) {
     const [position, setPosition] = useState(0)
+    const [data, setData] = useState<FormData>({} as FormData)
 
     const steps = [
         'Objetivo',
         'Gênero',
-        'Medidas',
         'Experiencia',
-        'Final'
+        'Medidas',
+        'Fim'
     ]
-    
+
+
     function handleNextStep() {
         const number = position + 1
-        if (number == steps.length + 1) return
+        if (number == steps.length) return
         setPosition(number)
     }
     function handlePreviusStep() {
@@ -45,8 +61,10 @@ export function FormContextProvider({ children }: FormContextProviderProps) {
             value={{
                 handleNextStep,
                 handlePreviusStep,
+                setData,
                 position,
-                steps
+                steps,
+                data,
             }}
         >
             {children}

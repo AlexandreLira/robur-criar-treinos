@@ -41,9 +41,12 @@ export function StepProgress({ position, steps = [] }: StepProgressProps) {
                         key={step}
                         style={{
                             color: index <= position ? theme.colors.black : theme.colors.gray,
-                            fontWeight: index == position ? 'bold' : 'normal'
-                        }}
+                            fontWeight: index == position ? 'bold' : 'normal',
+                            flexShrink: 1,
 
+                            textAlign: 'center'
+                        }}
+                        numberOfLines={1}
                     >{step}</Text>
                 )}
             </View>

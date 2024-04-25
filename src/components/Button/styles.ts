@@ -12,7 +12,9 @@ export const styles = StyleSheet.create({
 
     gradient: {
         flex: 1,
+        flexDirection: 'row',
         borderRadius: 999,
+        gap: 12,
         justifyContent: 'center',
         alignItems: 'center',
        

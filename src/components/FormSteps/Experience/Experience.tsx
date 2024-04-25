@@ -1,35 +1,25 @@
 import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
-import { Card } from "../../Card";
-import { useState } from "react";
-import { styles } from "./ExperienceStyles";
 
-const options = [
-    {
-        icon: '🐣',
-        text: 'Sedentária',
-    },
-    {
-        icon: '🐥',
-        text: 'Levemente ativo',
-    },
-    {
-        icon: '🐓',
-        text: 'Moderadamente ativo',
-    },
-    {
-        icon: '💪',
-        text: 'Fortemente ativo',
-    },
-    {
-        icon: '🐭',
-        text: 'Extremamente ativo',
-    },
-]
+import { Card } from "../../Card";
+import { Button } from "../../Button";
+
+import { styles } from "./ExperienceStyles";
+import { useForm } from "../../../hooks/useForm";
+import { options } from "../../../utils/constants";
+
+import { theme } from "../../../theme";
+import { ItemType } from "../../../contexts/FormContext";
+
+
 
 export function Experience() {
-    const [selected, setSelected] = useState(options[0])
+    const { handleNextStep, handlePreviusStep, setData, data } = useForm()
 
+    const items = options.experiences
+    function handleSelected(event: ItemType) {
+        setData(state => ({ ...state, experience: event }))
+    }
 
     return (
         <>
@@ -39,22 +29,35 @@ export function Experience() {
             </Text>
             <View style={styles.content}>
                 <View style={styles.wrapper}>
-                    {options.map((item, index) =>
+                    {items.map((item, index) =>
                         <Animated.View
                             entering={FadeIn.delay(100 * index)}
-                            key={item.text}
+                            key={item.key}
                         >
-
                             <Card
-                                icon={item.icon}
-                                text={item.text}
-
-                                selected={selected.text == item.text}
-                                onPress={() => setSelected(item)}
+                                icon={item.icon!}
+                                text={item.value}
+                                selected={data?.experience?.value == item.value}
+                                onPress={() => handleSelected(item)}
                             />
                         </Animated.View>
                     )}
                 </View>
+            </View>
+
+            <View style={styles.footer}>
+                <Button
+                    title="Voltar"
+                    colors={[theme.colors.shape, theme.colors.shape]}
+                    textColor={theme.colors.gray}
+                    onPress={handlePreviusStep}
+
+                />
+                <Button
+                    disabled={!Boolean(data.experience)}
+                    title="Próximo"
+                    onPress={handleNextStep}
+                />
             </View>
         </>
 

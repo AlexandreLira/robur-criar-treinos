@@ -1,28 +1,21 @@
 import { Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
+
 import { Card } from "../../Card";
-import { useState } from "react";
+import { useForm } from "../../../hooks/useForm";
+import { Button } from "../../Button";
+import { options } from "../../../utils/constants";
+
 import { styles } from "./ObjectiveStyles";
 
-const options = [
-    {
-        text: 'Perder Gordura',
-        icon: '🥑'
-    },
-    {
-        text: 'Ficar em Forma',
-        icon: '🏃'
-    },
-    {
-        text: 'Construir Músculos',
-        icon: '💪'
-    },
-]
-
 export function Objective() {
-    const [selected, setSelected] = useState(options[0])
+    const { setData, data, handleNextStep } = useForm()
 
+    const items = options.objectives
 
+    function handleSelected(event: typeof items[0]) {
+        setData(state => ({ ...state, objective: event }))
+    }
 
     return (
         <>
@@ -32,22 +25,29 @@ export function Objective() {
             </Text>
             <View style={styles.content}>
                 <View style={styles.wrapper}>
-                    {options.map((item, index) =>
+                    {items.map((item, index) =>
                         <Animated.View
                             entering={FadeIn.delay(100 * index)}
-                            key={item.text}
+                            key={item.key}
                         >
 
                             <Card
-                                icon={item.icon}
-                                text={item.text}
+                                icon={item.icon!}
+                                text={item.value}
 
-                                selected={selected.text == item.text}
-                                onPress={() => setSelected(item)}
+                                selected={data?.objective?.value == item.value}
+                                onPress={() => handleSelected(item)}
                             />
                         </Animated.View>
                     )}
                 </View>
+            </View>
+
+            <View style={styles.footer}>
+                <Button
+                    title="Próximo"
+                    onPress={handleNextStep}
+                />
             </View>
         </>
 

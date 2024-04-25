@@ -10,6 +10,7 @@ import { Gender } from "../../components/FormSteps/Gender";
 import { theme } from "../../theme";
 import { Experience } from "../../components/FormSteps/Experience";
 import { Measurements } from "../../components/FormSteps/Measurements";
+import { Conclusion } from "../../components/FormSteps/Conclusion/Conclusion";
 
 
 
@@ -25,9 +26,11 @@ export function FormSteps() {
             case 1:
                 return <Gender />
             case 2:
-                return <Measurements />
-            case 3:
                 return <Experience />
+            case 3:
+                return <Measurements />
+            case 4:
+                return <Conclusion />
             default:
         }
     }
@@ -41,19 +44,6 @@ export function FormSteps() {
 
 
             {renderStep(position)}
-            
-            <View style={styles.footer}>
-                <Button
-                    title="Voltar"
-                    colors={[theme.colors.shape, theme.colors.shape]}
-                    textColor={theme.colors.gray}
-                    onPress={handlePreviusStep}
-                />
-                <Button
-                    title="Próximo"
-                    onPress={handleNextStep}
-                />
-            </View>
 
         </SafeAreaView>
     )
