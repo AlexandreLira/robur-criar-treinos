@@ -5,7 +5,7 @@ const openai = new OpenAI({ apiKey: process.env.EXPO_PUBLIC_API_KEY });
 
 
 
-const response_json_exemple = {
+export const response_json_exemple = {
     data: [
         {
             "day": 1,
