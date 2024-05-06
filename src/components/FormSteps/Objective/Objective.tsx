@@ -45,6 +45,7 @@ export function Objective() {
 
             <View style={styles.footer}>
                 <Button
+                    disabled={!Boolean(data.objective?.label)}
                     title="Próximo"
                     onPress={handleNextStep}
                 />

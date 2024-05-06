@@ -10,8 +10,8 @@ const Stack = createNativeStackNavigator();
 export default function AppRoutes() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Form" component={FormSteps} options={{headerShown: false}}/>
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="Form" component={FormSteps}/>
                 <Stack.Screen name="WorkoutPlan" component={WorkoutPlan} />
             </Stack.Navigator>
 

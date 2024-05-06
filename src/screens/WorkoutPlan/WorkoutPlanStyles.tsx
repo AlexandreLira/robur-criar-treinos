@@ -5,6 +5,8 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     card: {
         
@@ -16,7 +18,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 12,
         gap: 12,
         alignItems: 'center',
-        ...theme.shadow.card
+        ...theme.shadow.light
     },
     content: {
         flex: 1,

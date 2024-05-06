@@ -26,6 +26,14 @@ export function Measurements() {
         }))
     }
 
+    function canGoNext(): boolean {
+        const { age, stature, weight } = data
+        if (age?.value !== '' && stature?.value !== '' && weight?.value !== '') {
+            return false
+        }
+        return true
+    }
+
 
     const weightRef = useRef<TextInput>(null);
     const statureRef = useRef<TextInput>(null);
@@ -45,7 +53,8 @@ export function Measurements() {
                         value={data.age?.value}
                         keyboardType="number-pad"
                         returnKeyType="next"
-                        placeholder={'ex: 23'}
+                        placeholder={'23'}
+                        maxLength={3}
                         onSubmitEditing={() => {
                             weightRef.current?.focus();
                         }}
@@ -58,7 +67,8 @@ export function Measurements() {
                         onChangeText={(value) => handleOnChangeText(items[1], value)}
                         value={data.weight?.value}
                         returnKeyType="next"
-                        placeholder={'Peso'}
+                        maxLength={3}
+                        placeholder={'89'}
                         onSubmitEditing={() => {
                             statureRef.current?.focus();
                         }}
@@ -67,10 +77,11 @@ export function Measurements() {
                         inputRef={statureRef}
                         title={items[2].label}
                         keyboardType="number-pad"
-                        onChangeText={(value) => handleOnChangeText(items[2], value)}
+                        maxLength={4}
+                        onChangeText={(value) => handleOnChangeText(items[2], value.replace(/^(\d+)(\d{2})$/, '$1,$2'))}
                         value={data.stature?.value}
                         returnKeyType="done"
-                        placeholder={'Altura'}
+                        placeholder={'1.89'}
                     />
 
                 </View>
@@ -85,6 +96,7 @@ export function Measurements() {
                 />
                 <Button
                     title="Próximo"
+                    disabled={canGoNext()}
                     onPress={handleNextStep}
                 />
             </View>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View, Image, ActivityIndicator } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeIn } from "react-native-reanimated";
+import { ScrollView, Text, View, Image } from "react-native";
+import Animated, { FadeIn, interpolate, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 
 import { styles } from "./WorkoutPlanStyles";
 import { create_train } from "../../service/openai";
 import { useForm } from "../../hooks/useForm";
+import Logo from '../../assets/loading.png';
 import { theme } from "../../theme";
 
 const a = { day: 1, name: 'Agachamento Livre', series: 3, repetitions: 12 }
@@ -26,6 +26,20 @@ export function WorkoutPlan() {
     const [loading, setLoading] = useState(true)
     const [plan, setPlan] = useState<PlanType[]>([])
     const { data } = useForm()
+    const spin = useSharedValue(0);
+    const spin2 = useSharedValue(0);
+
+    const stylez = useAnimatedStyle(() => {
+        return {
+            height: interpolate(spin2.value, [0, 360], [200, 100]),
+            transform: [
+                {
+                    rotateZ: `${spin.value}deg`,
+                },
+
+            ],
+        };
+    });
 
 
     async function create() {
@@ -40,24 +54,36 @@ export function WorkoutPlan() {
         }
     }
 
+    function startAnimation() {
+        if (loading) {
+            const timing = 3000
+            spin.value = withRepeat(withTiming(360, { duration: timing }), -2, false);
+            spin2.value = withRepeat(withTiming(360, { duration: timing }), -2, true);
+        }
+    }
+
     useEffect(() => {
-       create()
+        startAnimation()
+        create()
     }, [])
 
 
     if (loading) {
         return (
             <View style={[styles.container]}>
-                <LinearGradient
-                    colors={[theme.colors.primary, theme.colors.secodanry]}
-                    style={{ justifyContent: 'center', alignItems: 'center', gap: 24, flex: 1, }}
-                    start={[0.0, 0.0]}
-                    end={[1.0, 1.0]}
-                >
-                    <ActivityIndicator color={theme.colors.shape} size={"large"} />
-                    <Text style={[styles.label, { color: theme.colors.shape }]}>Estamos criando seu treino...</Text>
+                <View style={{ width: 200, aspectRatio: 1, justifyContent: 'center', alignItems: 'center' }}>
 
-                </LinearGradient>
+                    <Animated.Image source={Logo} style={stylez} resizeMode="contain" />
+                </View>
+
+                <Text
+                    style={{
+                        color: theme.colors.gray,
+                        fontWeight: 'bold',
+                        marginTop: 24
+                    }}
+
+                >Estamos criando seu treino...</Text>
             </View>
         )
     }

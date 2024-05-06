@@ -51,6 +51,7 @@ export function Gender() {
                     onPress={handlePreviusStep}
                 />
                 <Button
+                    disabled={!Boolean(data.gender?.label)}
                     title="Próximo"
                     onPress={handleNextStep}
                 />

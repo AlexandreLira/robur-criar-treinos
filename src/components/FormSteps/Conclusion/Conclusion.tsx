@@ -8,11 +8,12 @@ import { create_train } from "../../../service/openai"
 import { useNavigation } from "@react-navigation/native"
 
 export function Conclusion() {
-    const { data, handleNextStep, handlePreviusStep } = useForm()
+    const { data, handlePreviusStep } = useForm()
 
     const navigation = useNavigation()
 
     async function handleCreate() {
+        // @ts-ignore
         navigation.navigate('WorkoutPlan')
     }
 
