@@ -7,6 +7,8 @@ import { create_train } from "../../service/openai";
 import { useForm } from "../../hooks/useForm";
 import Logo from '../../assets/loading.png';
 import { theme } from "../../theme";
+import { WorkoutService } from "../../service/WorkoutService";
+import { useWorkout } from "../../hooks/useWorkout";
 
 const a = { day: 1, name: 'Agachamento Livre', series: 3, repetitions: 12 }
 
@@ -24,10 +26,11 @@ const img = 'https://static.wixstatic.com/media/2edbed_0071b46ea32c4f3b9e6d1af5c
 export function WorkoutPlan() {
 
     const [loading, setLoading] = useState(true)
-    const [plan, setPlan] = useState<PlanType[]>([])
     const { data } = useForm()
     const spin = useSharedValue(0);
     const spin2 = useSharedValue(0);
+
+    const { setWorkout, workout } = useWorkout()
 
     const stylez = useAnimatedStyle(() => {
         return {
@@ -45,8 +48,9 @@ export function WorkoutPlan() {
     async function create() {
         try {
             setLoading(true)
-            const response = await create_train(data)
-            setPlan(response.data)
+            const b = await WorkoutService.create(data)
+
+            setWorkout(b)
         } catch {
 
         } finally {
@@ -96,7 +100,7 @@ export function WorkoutPlan() {
             <ScrollView contentContainerStyle={{ padding: 24 }} showsVerticalScrollIndicator={false} >
                 <View style={{ gap: 16 }}>
 
-                    {plan.map((item, index) =>
+                    {workout.map((item, index) =>
 
                         <Animated.View
                             key={item.name}
@@ -111,7 +115,7 @@ export function WorkoutPlan() {
                                 {item.repetitions &&
                                     <Text style={styles.label}>{`${item.series} Séries X ${item.repetitions} repetições`}</Text>
                                 }
-                                {item.duration &&
+                                {item?.duration &&
                                     <Text style={styles.label}>{`${item.series} Séries X ${item.duration}`}</Text>
                                 }
                             </View>

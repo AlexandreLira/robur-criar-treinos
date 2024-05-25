@@ -2,20 +2,30 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./WorkoutStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
-import { response_json_exemple } from "../../service/openai";
 import { ExerciseCard } from "../../components/ExerciseCard";
+import { useWorkout } from "../../hooks/useWorkout";
+import { useNavigation } from "@react-navigation/native";
 
 const days = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB']
 
 export function Workout() {
     const [selected, setSelected] = useState<number | null>(null)
     const [exercises, setExercises] = useState([])
+    const { workout, loading } = useWorkout()
+
+    const navigation = useNavigation()
 
     function handleSelectedDay(day: number) {
-        const a = response_json_exemple.data.filter(item => item.day == day)
+        const a = workout.filter(item => item.day == day)
         setExercises(a)
         setSelected(day)
     }
+
+    useEffect(() => {
+        if (workout.length === 0 && !loading) {
+            navigation.navigate('Form')
+        }
+    }, [workout])
 
     return (
         <SafeAreaView style={styles.container}>
@@ -46,7 +56,7 @@ export function Workout() {
                 </View>
 
                 <Text>Exercícios</Text>
-                <ScrollView contentContainerStyle={{ gap: 12 }} style={{height: '100%'}} showsVerticalScrollIndicator={false}>
+                <ScrollView contentContainerStyle={{ gap: 12 }} style={{ height: '100%' }} showsVerticalScrollIndicator={false}>
                     {exercises.map(item =>
                         <ExerciseCard data={item} key={item.name} />
                     )}
